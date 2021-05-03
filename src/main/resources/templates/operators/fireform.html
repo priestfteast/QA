@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'fireform')}">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">Fire Form</title>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="container col-md-6 offset-3">
+        <div class="card-body">
+            <h5 class="card-title" style="color: #0275d8">Operator form</h5>
+            <br>
+            <form th:object="${operator}" th:action="@{'/operators/fire'}" method="post"
+                  class="form-horizontal">
+                <input type="hidden" th:field="*{id}">
+                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                    <p th:text="#{operator.error}">Please Correct Errors Below</p>
+                </div>
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Name:</p>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="name" placeholder="Full name"
+                                   th:field="*{fullName}"
+                                   th:errorclass="has-error"
+                                   th:value="${operator.fullName}"
+                                   th:readonly="readonly"
+                            >
+                            <span class="help-block" th:if="${#fields.hasErrors('fullName')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('fullName')}"
+                                                th:text="${err}"/>
+                                        </ul>
+                                    </span>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Shift:</p>
+                        </div>
+                        <div class="col-md-6">
+                            <select class="form-control" th:field="*{shift}"  th:disabled="disabled">
+                                <option th:each="type : ${T(ru.comearth.russianpost.domain.Shift).values()}"
+                                        th:value="${type.name()}"
+                                        th:text="${type.name()}"
+                                >val
+                                </option>
+                            </select>
+
+                            <select class="form-control" th:remove="all">
+                                <option>SEVEN_AM</option>
+                                <option>EIGHT_AM</option>
+                                <option>NINE_AM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p>Employed:</p>
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" id="doe" placeholder="Date of employement"
+                                   th:field="*{employementDate}"
+                                   th:errorclass="has-error"
+                                   th:value="${operator.employementDate}"
+                                   th:readonly="readonly"
+                                   >
+                            <span class="help-block" th:if="${#fields.hasErrors('employementDate')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('employementDate')}"
+                                                th:text="${err}"/>
+                                        </ul>
+                                    </span>
+                        </div>
+                    </div>
+
+
+                    <br>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label>Fired</label> <br>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="checkbox" th:name="fired" th:value="true" th:checked="${operator.isFired()}" th:disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <p>Fire Cause:</p>
+                    </div>
+                    <div class="col-md-6">
+                        <select class="form-control" th:field="*{fireCause}">
+                            <option th:each="type : ${T(ru.comearth.russianpost.domain.FireCause).values()}"
+                                    th:value="${type.name()}"
+                                    th:text="${type.name()}"
+                            >val
+                            </option>
+                        </select>
+
+                    </div>
+                </div>
+                <br>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <p>Retirement Date:</p>
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="dor" placeholder="Date of retirement"
+                               th:field="*{retirementDate}"
+                               th:errorclass="has-error">
+                        <span class="help-block" th:if="${#fields.hasErrors('retirementDate')}">
+                                        <ul>
+                                            <li th:each="err : ${#fields.errors('retirementDate')}"
+                                                th:text="${err}"/>
+                                        </ul>
+                                    </span>
+                    </div>
+                </div>
+                <br>
+
+                <button type="submit" class="btn btn-primary">Fire</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

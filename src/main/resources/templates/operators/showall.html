@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'operators')}">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">Operators</title>
+</head>
+
+<body>
+<div class="container-fluid">
+
+    <div class="container col-md-6 offset-3">
+        <br>
+        <br>
+        <div class="row">
+                <form th:action="@{/filter/}" th:method="post">
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-check">
+                                <input class="form-check-input" id="exampleRadios1" name="sort by"
+                                       type="radio" value="actual" th:checked="${request.equals('[actual]')}">
+                                <label class="form-check-label" for="exampleRadios1" >Actual employees</label>
+                            </div>
+                        </div>
+                    <div class="col-md-3">
+                            <div class="form-check">
+                                <input class="form-check-input" id="exampleRadios2" name="sort by"
+                                       type="radio" value="fired" th:checked="${request.equals('[fired]')}">
+                                <label class="form-check-label" for="exampleRadios1">Fired employees</label>
+                            </div>
+                 </div>
+                    <div class="col-md-3">
+                            <div class="form-check">
+                                <input class="form-check-input" id="exampleRadios3" name="sort by"
+                                       type="radio" value="all" th:checked="${request.equals('[all]')}">
+                                <label class="form-check-label" for="exampleRadios1">All employees</label>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" type="submit">Filter</button>
+                        </div>
+                    </div>
+                </form>
+    </div>
+        <br>
+    <br>
+    <br>
+
+        <div class="row">
+            <div class="col-md-2 ">
+                <p class="panel-title">Search</p>
+            </div>
+            <div class="col-md-6">
+                <input class="form-control mb-4" id="tableSearch" placeholder="Type something here"
+                       type="text">
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-primary" href="#" role="button" th:href="@{'/operators/new'}">Add operator</a>
+            </div>
+        </div>
+
+    <div class="row">
+        <div class="table-responsive" th:if="${not #lists.isEmpty(operators)}">
+            <table class="table table-hover">
+                <thead class="thead-inverse">
+                <tr>
+                    <th>№</th>
+                    <th>Name</th>
+                    <th>Employed</th>
+                    <th>Fire cause</th>
+                    <th>Update</th>
+                </tr>
+                </thead>
+                <tbody id="myTable">
+                <tr th:each="operator : ${operators}">
+                    <!--/*@thymesVar id="operator" type="ru.comearth.russianpost.domain.Operator"*/-->
+                    <td>123</td>
+                    <td th:text="${operator.fullName}">Tasty Goodnees 3</td>
+                    <td th:text="${operator.employementDate}">Tasty Goodnees 3</td>
+                    <td th:text="${operator.isFired()} ? ${operator.fireCause} : '  '">Fire cause</td>
+                    <td><a href="#" th:href="@{'/operators/' + ${operator.id}+'/update'}">Update</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+</div>
+</div>
+</div>
+<script>
+    $('.table tbody tr').each(function (i) {
+        var number = i + 1;
+        $(this).find('td:first').text(number + ".");
+    });
+</script>
+
+<!--Filter table-->
+<script>
+    $(document).ready(function () {
+        $("#tableSearch").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
+</body>
+</html>

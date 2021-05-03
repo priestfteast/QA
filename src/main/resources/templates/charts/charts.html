@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'charts')}">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">Charts</title>
+</head>
+
+<body>
+<br>
+<div class="container-fluid">
+<div class="container col-md-10 offset-1">
+    <form action="http:\\localhost" method="post" class="form-horizontal" th:action="@{'/postcharts'}">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card">
+                    <h5 class="card-title">Start date</h5>
+                    <input name="startdate" type="date" th:value="${request.get(0)}" required="required"
+                           pattern="{1,20}" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card">
+                    <h5 class="card-title">End date</h5>
+                    <input name="enddate" type="date" required="required" th:value="${request.get(1)}"
+                           pattern="{1,20}" class="form-control">
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="card">
+                    <select name="operator">
+                        <option class="dropdown-item" text="all" value="[all]"
+                                th:selected="${request.get(2).equals('[all]')}">
+                            All operators
+                        </option>
+                        <option class="dropdown-item" th:each="operator : ${operators}"
+                                th:text="${operator.fullName}"
+                                th:value="${operator.fullName}" th:selected="${request.get(2).equals(operator.fullName)}">
+                            Name
+                        </option>
+                    </select>
+                </div>
+                <br>
+                <div class="card">
+                    <select name="criterion">
+                        <option class="dropdown-item" text="filter" value="CSAT"
+                                th:selected="${request.get(3).equals('CSAT')}">
+                            CSAT
+                        </option>
+                        <option class="dropdown-item" text="filter" value="AHT"
+                                th:selected="${request.get(3).equals('AHT')}">
+                            AHT
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-sm-2">
+                <div class="card">
+                    <button type="submit" class="btn btn-primary ">Submit</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+<br>
+<br>
+<div class="row" th:if="${error ne null}">
+    <div class="table-responsive">
+        <p th:text="${error}"></p>
+    </div>
+</div>
+<div class="col-md-4 offset-4" th:if="${#lists.isEmpty(days)and request.get(4).equals('not null')}">
+    <div class="table-responsive">
+        <p th:text="${'No data found for chosen period'}"></p>
+    </div>
+</div>
+</div>
+
+    <div class="row " th:if="${request.get(3).equals('CSAT')and not #lists.isEmpty(days) and  error == null}">
+
+        <div class="col-md-8">
+            <canvas id="csat_chart">
+            </canvas>
+            <script type="text/javascript" th:inline="javascript">
+                new Chart(document.getElementById("csat_chart"), {
+                    type: 'line',
+                    data: {
+                        labels: /*[[ ${days} ]]*/,
+                        datasets: [
+                            {
+                                label: "Current CSAT",
+                                borderColor: '#0275d8',
+                                lineTension: 0,
+                                fill: false,
+                                data: /*[[ ${csats} ]]*/,
+                            },
+                            {
+                                label: "Current DCSAT",
+                                borderColor: 'rgb(255, 0, 0)',
+                                lineTension: 0,
+                                fill: false,
+                                data: /*[[ ${dcsats} ]]*/,
+                            }
+
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        // maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    userCallback: function (v) {
+                                        return v + ' %.'
+                                    },
+                                    stepSize: 10
+                                }
+                            }]
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return tooltipItem.yLabel + ' %'
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+        </div>
+
+        <div class="col-md-4">
+            <br>
+            <br>
+            <div class="card" style="width: 18rem; height: 20rem">
+                <br>
+                <br>
+
+                <div class="card-body">
+                    <h6 class="card-title" th:text="${'С '+request.get(0) +'  по  '+request.get(1)}"></h6>
+                    <p class="card-text" th:if="${request.get(2).equals('[all]')}"
+                       th:text="${'Оценено операторов : '+opers}">Somefjmfhjjhjft.</p>
+                    <p class="card-text" th:if="${request.get(2).equals('[all]')}"
+                       th:text="${'CSAT = '+averagecsat}">Somefjmfhjjhjft.</p>
+                    <p class="card-text" th:if="${request.get(2).equals('[all]')}"
+                       th:text="${'DCSAT = '+averagedcsat}">Somefjmfhjjhjft.</p>
+                    <p class="card-text" th:if="${not request.get(2).equals('[all]')}"
+                       th:text="${request.get(2)+ ' : '}">Somefjmfhjjhjft.</p>
+                    <p class="card-text" th:if="${not request.get(2).equals('[all]')}"
+                       th:text="${'CSAT = '+averagecsat}">Somefjmfhjjhjft.</p>
+                    <p class="card-text" th:if="${not request.get(2).equals('[all]')}"
+                       th:text="${'DCSAT = '+averagedcsat}">Somefjmfhjjhjft.</p>
+                            </div>
+                        </div>
+    </div>
+    </div>
+
+    <div class="row " th:if="${request.get(3).equals('AHT')and not #lists.isEmpty(days) and  error == null}">
+        <div class="col-md-8">
+    <h6 class="card-title" th:text="${'С '+request.get(0) +'  по  '+request.get(1)}"></h6>
+    <p class="card-text" th:if="${request.get(2).equals('[all]')}"
+       th:text="${'Работало операторов : '+opers}">Somefjmfhjjhjft.</p>
+    <p class="card-text" th:if="${request.get(2).equals('[all]')}"
+       th:text="${'AHT = '+averageaht+'Hold = '+averagehold}">Somefjmfhjjhjft.</p>
+    <p class="card-text" th:if="${not request.get(2).equals('[all]')}"
+       th:text="${request.get(2)+ ' : '}">Somefjmfhjjhjft.</p>
+    <p class="card-text" th:if="${not request.get(2).equals('[all]')}"
+       th:text="${'AHT = '+averageaht+'Hold = '+averagehold}">Somefjmfhjjhjft.</p>
+        </div>
+
+    </div>
+
+    <div class="row " th:if="${request.get(3).equals('AHT')and not #lists.isEmpty(days) and  error == null}">
+    <div class="col-md-8">
+        <canvas id="aht_chart">
+        </canvas>
+        <script type="text/javascript" th:inline="javascript">
+                new Chart(document.getElementById("aht_chart"), {
+                    type: 'line',
+                    data: {
+                        labels: /*[[ ${days} ]]*/,
+                        datasets: [
+                            {
+                                label: "Current AHT",
+                                borderColor: '#0275d8',
+                                lineTension: 0,
+                                fill: false,
+                                data: /*[[ ${timestats} ]]*/,
+                            },
+                            {
+                                label: "Current Hold",
+                                borderColor: 'forestgreen',
+                                lineTension: 0,
+                                fill: false,
+                                data: /*[[ ${hold} ]]*/,
+                            },
+                            {
+                                label: "Target AHT",
+                                borderColor: 'rgb(255, 0, 0)',
+                                lineTension: 0,
+                                fill: false,
+                                data: /*[[ ${target} ]]*/,
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        // maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    userCallback: function (v) {
+                                        return v + ' сек.'
+                                    },
+                                    stepSize: 50
+                                }
+                            }]
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function (tooltipItem) {
+                                    return tooltipItem.yLabel + ' сек.'
+                                }
+                            }
+                        }
+                    }
+                });
+        </script>
+    </div>
+
+        <div class="col-md-4">
+            <canvas id="aht_bar_chart">
+            </canvas>
+            <script type="text/javascript" th:inline="javascript">
+                new Chart(document.getElementById("aht_bar_chart"), {
+                    type: 'bar',
+                    data: {
+                        labels: ["1st Week", "2nd Week", "3d Week", "4th Week", "Month"],
+                        datasets: [
+                            {
+                                label: "AHT (seconds)",
+                                backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", 'forestgreen'],
+                                data: /*[[ ${ahtbyexperience} ]]*/,
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: { display: false},
+                        title: {
+                            display: true,
+                            text: 'Average AHT due to experience'
+                        }
+                    }
+                });
+            </script>
+        </div>
+
+
+
+</div>
+</div>
+</div>
+</body>
+</html>
