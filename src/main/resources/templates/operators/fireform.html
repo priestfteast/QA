@@ -45,17 +45,11 @@
                         </div>
                         <div class="col-md-6">
                             <select class="form-control" th:field="*{shift}"  th:disabled="disabled">
-                                <option th:each="type : ${T(ru.comearth.russianpost.domain.Shift).values()}"
+                                <option th:each="type : ${T(com.balakin.qa.domain.Project).values()}"
                                         th:value="${type.name()}"
                                         th:text="${type.name()}"
                                 >val
                                 </option>
-                            </select>
-
-                            <select class="form-control" th:remove="all">
-                                <option>SEVEN_AM</option>
-                                <option>EIGHT_AM</option>
-                                <option>NINE_AM</option>
                             </select>
                         </div>
                     </div>
@@ -100,7 +94,7 @@
                     </div>
                     <div class="col-md-6">
                         <select class="form-control" th:field="*{fireCause}">
-                            <option th:each="type : ${T(ru.comearth.russianpost.domain.FireCause).values()}"
+                            <option th:each="type : ${T(com.balakin.qa.domain.FireCause).values()}"
                                     th:value="${type.name()}"
                                     th:text="${type.name()}"
                             >val

@@ -44,28 +44,21 @@
 
                     <div class="row">
                         <div class="col-md-3">
-                            <p>Shift:</p>
+                            <p>Project:</p>
                         </div>
                         <div class="col-md-4">
-                            <select class="form-control" th:field="*{shift}">
-                                <option th:each="type : ${T(ru.comearth.russianpost.domain.Shift).values()}"
+                            <select class="form-control" th:field="*{project}">
+                                <option th:each="type : ${T(com.balakin.qa.domain.Project).values()}"
                                         th:value="${type.name()}"
                                         th:text="${type.name()}"
                                 >val
                                 </option>
-                            </select>
-
-                            <select class="form-control" th:remove="all">
-                                <option>SEVEN_AM</option>
-                                <option>EIGHT_AM</option>
-                                <option>NINE_AM</option>
                             </select>
                         </div>
                     </div>
                     <br>
 
                     <div class="row">
-
                         <div class="col-md-3">
                             <p>Employed:</p>
                         </div>
