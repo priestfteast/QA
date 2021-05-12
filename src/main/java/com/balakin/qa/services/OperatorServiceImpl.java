@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class OperatorServiceimpl implements OperatorService {
+public class OperatorServiceImpl implements OperatorService {
 
     private final OperatorToOperatorCommand operatorToOperatorCommand;
     private final OperatorCommandToOperator operatorCommandToOperator;
@@ -23,7 +23,7 @@ public class OperatorServiceimpl implements OperatorService {
 
     private final OperatorRepository operatorRepository;
 
-    public OperatorServiceimpl(OperatorToOperatorCommand operatorToOperatorCommand, OperatorCommandToOperator operatorCommandToOperator, OperatorRepository operatorRepository) {
+    public OperatorServiceImpl(OperatorToOperatorCommand operatorToOperatorCommand, OperatorCommandToOperator operatorCommandToOperator, OperatorRepository operatorRepository) {
         this.operatorToOperatorCommand = operatorToOperatorCommand;
         this.operatorCommandToOperator = operatorCommandToOperator;
         this.operatorRepository = operatorRepository;
