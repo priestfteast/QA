@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'checklist')}">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">CheckList</title>
+</head>
+<body >
+
+
+<div class="container-fluid">
+    <div class="container col-md-10 offset-1">
+
+        <form action="http:\\localhost" id="form" method="post" class="form-horizontal" th:action="@{'/checklist/save'}">
+        <div class="col-md-3">
+        <div class="form-group">
+            <label for="project" style="font-weight: bold; color: #218838">Choose Project</label>
+            <select name="project" class="form-control selectpicker"  id="project" style="font-weight: bold; color: #0069D9" onchange="loadPage(this)">
+                 <option th:each="project : ${T(com.balakin.qa.domain.Project).values()}"
+                       th:value="${project}" th:selected="${checkList.getProject().equals(project)}"
+                        th:text="${project}">pizza
+
+                </option>
+
+            </select>
+        </div>
+        </div>
+        <br>
+        <br>
+            <div class="row" id = "a1" >
+                <div class="col-md-10">
+                    <input name="block_0" type="text" th:value="${#strings.substringAfter(blocknames.get(0),'=')}" style="font-weight: bold" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)">Add line</button>
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row1}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1">
+                    <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" onclick="removeLine(this.parentNode.parentNode.id)"> - </button>
+                </div>
+            </div>
+            <br>
+            <div class="row" id = "b1">
+                <div class="col-md-10">
+                    <input name="block_1" type="text" th:value="${#strings.substringAfter(blocknames.get(1),'=')}" style="font-weight: bold" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)">Add line</button>
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row2}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1">
+                    <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" onclick="removeLine(this.parentNode.parentNode.id)"> - </button>
+                </div>
+            </div>
+            <br>
+            <div class="row" id = "c1">
+                <div class="col-md-10">
+                    <input name="block_2" type="text" th:value="${#strings.substringAfter(blocknames.get(2),'=')}" style="font-weight: bold" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)">Add line</button>
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row3}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1">
+                    <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" onclick="removeLine(this.parentNode.parentNode.id)"> - </button>
+                </div>
+            </div>
+            <br>
+            <div class="row" id = "d1">
+                <div class="col-md-10">
+                    <input name="block_3" type="text" th:value="${#strings.substringAfter(blocknames.get(3),'=')}" style="font-weight: bold" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)">Add line</button>
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row4}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1">
+                    <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" onclick="removeLine(this.parentNode.parentNode.id)"> - </button>
+                </div>
+            </div>
+            <br>
+            <div class="row" id = "e1">
+                <div class="col-md-10">
+                    <input name="block_4" type="text" th:value="${#strings.substringAfter(blocknames.get(4),'=')}" style="font-weight: bold" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)">Add line</button>
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row5}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1">
+                    <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" onclick="removeLine(this.parentNode.parentNode.id)"> - </button>
+                </div>
+            </div>
+            <br>
+
+            <button type="button" class="btn btn-primary" id="button" onclick="check()">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    var counter = 1;
+
+    function check() {
+        var count = 0;
+        var array = document.getElementsByTagName('input');
+        for (let i = 0; i < array.length; i++) {
+            if(array[i].name.includes('weight'))
+                count+= parseInt(array[i].value);
+        }
+        if(count!=100)
+            alert("Сумма весов всех критериев должна равняться 100. Сейчас - "+count)
+        else
+            document.getElementById("form").submit();
+    }
+
+    function addLine(id) {
+        console.log(id)
+        var row = document.createElement('div');
+        row.className = 'row';
+        row.id=id+counter;
+        counter++;
+        var block = document.createElement('div');
+        block.className = 'col-md-8 offset-md-1';
+        var criteria = document.createElement('input');
+        criteria.type = 'text';
+        criteria.name='criteria_'+row.id;
+        criteria.className = 'form-control';
+        criteria.placeholder = 'Введите название критерия оценки'
+        var block2 = document.createElement('div');
+        block2.className = 'col-md-1';
+        var value = document.createElement('input');
+        value.type = 'number';
+        value.name='weight_'+row.id;
+        value.className = 'form-control';
+        value.placeholder = 'Вес'
+        value.style="font-weight: bold; color: #218838";
+
+        var block3 = document.createElement('div');
+        block3.className = 'col-md-1';
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-primary';
+        button.innerHTML = ' + ';
+        button.onclick = function() { addLine(row.id)};
+
+        var block4 = document.createElement('div');
+        block4.className = 'col-md-1';
+        var button2 = document.createElement('button');
+        button2.type = 'button';
+        button2.className = 'btn btn-danger';
+        button2.innerHTML = ' - ';
+        button2.onclick = function() { removeLine(row.id)};
+
+        block.appendChild(criteria)
+        block2.appendChild(value)
+        block3.appendChild(button);
+        block4.appendChild(button2);
+        row.appendChild(block);
+        row.appendChild(block2);
+        row.appendChild(block3);
+        row.appendChild(block4);
+
+        var previous = document.getElementById(id);
+        console.log(previous.nextSibling);
+        previous.parentNode.insertBefore(row, previous.nextSibling);
+    }
+
+    function removeLine(id){
+        document.getElementById(id).parentElement.removeChild( document.getElementById(id));
+    }
+
+    function loadPage(project){
+        var selectedOption = project.options[project.selectedIndex];
+        window.location.replace("http://localhost:8080/checklist/"+selectedOption.value);
+
+    }
+
+</script>
+
+
+</body>
+</html>
