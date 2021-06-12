@@ -4,16 +4,12 @@ import com.balakin.qa.domain.CheckList;
 import com.balakin.qa.domain.Project;
 import com.balakin.qa.domain.Row;
 import com.balakin.qa.services.CheckListService;
-import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.io.StringReader;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -35,6 +31,8 @@ public class CheckListController {
 
         List<String> blockNames = checkListService.getBlockNames(checkList.getPayload());
         model.addAttribute("blocknames", blockNames);
+        List<String> criticalErrors = checkListService.getCritErrors(checkList.getPayload());
+        model.addAttribute("criterrors", criticalErrors);
         if(checkList.getPayload()!=null) {
             List<List<Row>> rows = checkListService.getBlocks(checkList.getPayload());
             model.addAttribute("row1", rows.get(0));
@@ -50,9 +48,7 @@ public class CheckListController {
 
     @PostMapping("/checklist/save")
     public String saveCheckList(@RequestParam MultiValueMap<String, String> formData) throws Exception {
-        System.out.println(formData);
         checkListService.saveOrUpdateCheckList(formData);
-        System.out.println(formData.getFirst("project"));
         return "redirect:"+formData.getFirst("project");
     }
 

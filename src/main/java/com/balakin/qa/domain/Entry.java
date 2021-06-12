@@ -37,7 +37,15 @@ public class Entry {
 
     private LocalDate checkDate;
 
+    @Lob
     private String logs;
 
-
+    @Override
+    public String toString() {
+        return "Entry{" +
+                "project=" + project +
+                ", operator=" + operator +
+                ", logs='" + logs + '\'' +
+                '}';
+    }
 }

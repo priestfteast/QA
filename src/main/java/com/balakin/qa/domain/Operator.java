@@ -31,6 +31,10 @@ public class Operator {
     @Enumerated(value = EnumType.STRING)
     private FireCause fireCause;
 
+    public Operator(String fullName){
+        this.fullName = fullName;
+    }
+
     @Override
     public String toString() {
         return "Operator: " +

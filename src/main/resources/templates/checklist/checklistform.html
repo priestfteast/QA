@@ -40,7 +40,7 @@
                     <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
-                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getMaxWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
@@ -64,7 +64,7 @@
                     <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
-                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getMaxWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
@@ -88,7 +88,7 @@
                     <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
-                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getMaxWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
@@ -112,7 +112,7 @@
                     <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
-                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getMaxWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
@@ -136,10 +136,32 @@
                     <input  th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}" class="form-control" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
-                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
+                    <input th:name="${row.getWeightName()}" type="number" th:value="${row.getMaxWeight()}" class="form-control" style="font-weight: bold; color: #218838" placeholder="Введите название оценочного блока">
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-primary" onclick="addLine(this.parentNode.parentNode.id)"> + </button>
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-danger" onclick="removeLine(this.parentNode.parentNode.id)"> - </button>
+                </div>
+            </div>
+            <br>
+
+            <div class="row" id = "f1">
+                <div class="col-md-10">
+                    <input disabled="disabled" name="critical_errors" type="text" style="font-weight: bold" class="form-control" value="Критические ошибки">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-primary" onclick="addCritError(this.parentNode.parentNode.id)">Add Crit Error</button>
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="crit : ${criterrors}" th:id="${crit.substring(crit.indexOf('_')+1,crit.indexOf('='))}">
+                <div class="col-md-9 offset-md-1">
+                    <input  th:name="${crit.substring(0,crit.indexOf('='))}" type="text" th:value="${crit.substring(crit.indexOf('=')+1)}" class="form-control" placeholder="Опишите критическую ошибку">
+                </div>
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" onclick="addCritError(this.parentNode.parentNode.id)"> + </button>
                 </div>
                 <div class="col-md-1">
                     <button type="button" class="btn btn-danger" onclick="removeLine(this.parentNode.parentNode.id)"> - </button>
@@ -184,12 +206,14 @@
         criteria.placeholder = 'Введите название критерия оценки'
         var block2 = document.createElement('div');
         block2.className = 'col-md-1';
-        var value = document.createElement('input');
-        value.type = 'number';
-        value.name='weight_'+row.id;
-        value.className = 'form-control';
-        value.placeholder = 'Вес'
-        value.style="font-weight: bold; color: #218838";
+            var value = document.createElement('input');
+            value.type = 'number';
+            value.name = 'weight_' + row.id;
+            value.className = 'form-control';
+            value.placeholder = 'Вес'
+            value.style = "font-weight: bold; color: #218838";
+            value.value=0;
+            value.readOnly=true;
 
         var block3 = document.createElement('div');
         block3.className = 'col-md-1';
@@ -223,6 +247,47 @@
 
     function removeLine(id){
         document.getElementById(id).parentElement.removeChild( document.getElementById(id));
+    }
+
+    function addCritError(id) {
+        console.log(id)
+        var row = document.createElement('div');
+        row.className = 'row';
+        row.id=id+counter;
+        counter++;
+        var block = document.createElement('div');
+        block.className = 'col-md-8 offset-md-1';
+        var error = document.createElement('input');
+        error.type = 'text';
+        error.name='error_'+row.id;
+        error.className = 'form-control';
+        error.placeholder = 'Опишите критическую ошибку'
+        var block2 = document.createElement('div');
+        block2.className = 'col-md-1';
+        var button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn btn-primary';
+        button.innerHTML = ' + ';
+        button.onclick = function() { addCritError(row.id)};
+
+        var block3 = document.createElement('div');
+        block3.className = 'col-md-1';
+        var button2 = document.createElement('button');
+        button2.type = 'button';
+        button2.className = 'btn btn-danger';
+        button2.innerHTML = ' - ';
+        button2.onclick = function() { removeLine(row.id)};
+
+        block.appendChild(error)
+        block2.appendChild(button);
+        block3.appendChild(button2);
+        row.appendChild(block);
+        row.appendChild(block2);
+        row.appendChild(block3);
+
+        var previous = document.getElementById(id);
+        console.log(previous.nextSibling);
+        previous.parentNode.insertBefore(row, previous.nextSibling);
     }
 
     function loadPage(project){

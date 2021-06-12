@@ -28,7 +28,7 @@ public class OperatorController {
 
     @RequestMapping({"/operators/showall","/operators/showall.html"})
     public String showoperators(Model model){
-        model.addAttribute("operators",operatorService.getAllOperators(request));
+        model.addAttribute("operators",operatorService.getAllOperators());
         model.addAttribute("request",request);
         return OPERATORS_ALL;
     }

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'allentries')}">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">All Entries</title>
+</head>
+
+<body>
+<br>
+<div class="container-fluid">
+    <div class="container col-md-10 offset-1">
+        <form action="http:\\localhost" method="post" class="form-horizontal" th:action="@{'/entries/entrylist'}">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <h5 class="card-title">Start date</h5>
+                        <input name="start_date" type="date" th:value="${start_date}" required="required"
+                               pattern="{1,20}" class="form-control">
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <h5 class="card-title">End date</h5>
+                        <input name="end_date" type="date" required="required" th:value="${end_date}"
+                               pattern="{1,20}" class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="card">
+                        <select name="operator" class="form-control selectpicker" >
+                            <option text="all" value="all"
+                                    th:selected="${operator.equals('all')}">
+                                All operators
+                            </option>
+                            <option class="dropdown-item" th:each="oper : ${operators}"
+                                    th:text="${oper.getFullName()}"
+                                    th:value="${oper.getFullName()}" th:selected="${operator.equals(oper.getFullName())}">
+                                Name
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="card">
+                        <select name="project" class="form-control selectpicker" id="project">
+                            <option th:each="proj : ${T(com.balakin.qa.domain.Project).values()}"
+                                    th:value="${proj}" th:selected="${proj.name().equals(project)}"
+                                    th:text="${proj}">pizza
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-sm-2">
+                    <div class="card">
+                        <button type="submit" class="btn btn-primary ">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br>
+        <div class="row">
+            <div class="col-md-2">
+                <a class="btn btn-primary" href="#" role="button" th:href="@{'/entries/new/AUCHAN'}">Add new Entry</a>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="table-responsive" th:if="${not #lists.isEmpty(entries)}">
+                <table class="table table-hover">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>№</th>
+                        <th>Operator</th>
+                        <th>Project</th>
+                        <th>Date</th>
+                        <th>Score</th>
+                    </tr>
+                    </thead>
+                    <tbody id="myTable">
+                    <tr th:each="entry : ${entries}">
+                        <td>123</td>
+                        <td th:text="${entry.getOperator().getFullName()}">Tasty Goodnees 3</td>
+                        <td th:text="${entry.getProject()}">Tasty Goodnees 3</td>
+                        <td th:text="${entry.getCheckDate()}">Fire cause</td>
+                        <td th:text="${entry.getTotalPoints()}">Score</td>
+                        <td><a href="#" th:href="@{'/entries/' + ${entry.id}+'/update'}">Update</a></td>
+                        <td><a href="#" th:href="@{'/entries/' + ${entry.id}+'/delete'}">Delete</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    $('.table tbody tr').each(function (i) {
+        var number = i + 1;
+        $(this).find('td:first').text(number + ".");
+    });
+</script>
+</body>
+</html>

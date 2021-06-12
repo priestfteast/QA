@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body},'entry')}">
+<head>
+    <meta charset="UTF-8">
+    <title id="pageTitle">Entry</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="container col-md-10 offset-1">
+
+        <form action="http:\\localhost" id="form" method="post" class="form-horizontal"
+              th:action="@{'/entries/save'}">
+            <div class="row">
+                <input th:if="${entry ne null}" type="hidden" name=id th:value="${entry.getId()}">
+            <div class="col-md-5">
+                <div class="form-group" th:if="${checkList ne null}">
+                    <label for="project" style="font-weight: bold; color: #218838">Choose Project</label>
+                    <select name="project" class="form-control selectpicker" id="project"
+                            style="font-weight: bold; color: #0069D9" onchange="loadPage(this)">
+                        <option th:each="project : ${T(com.balakin.qa.domain.Project).values()}"
+                                th:value="${project}" th:selected="${checkList.getProject().equals(project)}"
+                                th:text="${project}">pizza
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group" th:if="${entry ne null}">
+                    <label for="project" style="font-weight: bold; color: #218838">Choose Project</label>
+                    <select name="project" class="form-control selectpicker" id="project2"
+                            style="font-weight: bold; color: #0069D9" onchange="loadPage(this)">
+                        <option th:each="project : ${T(com.balakin.qa.domain.Project).values()}"
+                                th:value="${project}" th:selected="${entry.getProject().equals(project)}"
+                                th:text="${project}">pizza
+                        </option>
+                    </select>
+                </div>
+            </div>
+            </div>
+            <br>
+            <div class="row">
+            <div class="col-md-5">
+                <div class="form-group">
+                    <label for="operator" style="font-weight: bold; color: #218838">Choose operator</label>
+                    <select id="operator" name="operator"  class="form-control selectpicker" style="font-weight: bold; color: #0069D9">
+                        <option th:each="oper : ${operators}"
+                                th:text="${oper.getFullName()}"
+                                th:value="${oper.getFullName()}"
+                                th:selected="${operators.get(0).equals(oper)}">
+                            Name
+                        </option>
+                    </select>
+                </div>
+            </div>
+                <br>
+            </div>
+            <br>
+            <div id="auditorname" sec:authentication="name" hidden="hidden"></div>
+                <div class="row">
+                    <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="auditor" style="font-weight: bold; color: #218838">Auditor</label>
+                        <input id="auditor" name="auditor"  class="form-control" readonly="" style="font-weight: bold; color: #0069D9">
+                    </div>
+                    </div>
+
+                    <div class="col-md-3 offset-md-4" >
+                        <div class="form-group">
+                            <label for="total_score" style="font-weight: bold; color: #218838">Total score:</label>
+                            <div style="font-weight: bold;font-size: 24px; color:#218838" id="total_score">100</div>
+                        </div>
+                    </div>
+                </div>
+            <br>
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <label for="critical_error" style="font-weight: bold; color: #218838">Критические ошибки</label>
+                        <select onchange="countTotalScore()" id="critical_error" name="critical_error"  class="form-control selectpicker" style="font-weight: bold; color: #0069D9">
+                            <option  th:selected="${criterror.equals('Отсутствуют')}">
+                                Отсутствуют
+                            </option>
+                            <option th:each="crit : ${criterrors}"
+                                    th:text="${crit.substring(crit.indexOf('=')+1)}"
+                                    th:value="${crit.substring(crit.indexOf('=')+1)}"
+                                    th:selected="${criterror.equals(crit.substring(crit.indexOf('=')+1))}">
+                            Name
+                        </option>
+                        </select>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <br>
+            <div class="row" id="a1">
+                <div class="col-md-10">
+                    <input name="block_0" type="text" th:value="${#strings.substringAfter(blocknames.get(0),'=')}"
+                           style="font-weight: bold; color:#218838" class="form-control" readonly="">
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row1}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1" th:title="${row.getCriteria()}">
+                    <input th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}"
+                           style="color: #0069D9" class="form-control" readonly="">
+                </div>
+                         <div class="col-md-2">
+                    <select th:name="${row.getWeightName()}" class="form-control selectpicker"
+                            style="font-weight: bold; color: #0069D9" onchange="countTotalScore()">
+                        <option th:text="${row.getMaxWeight()}" th:selected="${row.getMaxWeight()==row.getWeight()}"> 10</option>
+                        <option th:selected="${0==row.getWeight()}">0</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row" id="b1">
+                <div class="col-md-10">
+                    <input name="block_1" type="text" th:value="${#strings.substringAfter(blocknames.get(1),'=')}"
+                           style="font-weight: bold; color:#218838" class="form-control" readonly="">
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row2}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1" th:title="${row.getCriteria()}">
+                    <input th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}"
+                           style="color: #0069D9" class="form-control" readonly="">
+                </div>
+                <div class="col-md-2">
+                    <select th:name="${row.getWeightName()}" class="form-control selectpicker"
+                            style="font-weight: bold; color: #0069D9" onchange="countTotalScore()">
+                        <option th:text="${row.getWeight()}"> 10</option>
+                        <option>0</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row" id="c1">
+                <div class="col-md-10">
+                    <input name="block_2" type="text" th:value="${#strings.substringAfter(blocknames.get(2),'=')}"
+                           style="font-weight: bold; color:#218838" class="form-control" readonly="">
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row3}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1" th:title="${row.getCriteria()}">
+                    <input th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}"
+                           style="color: #0069D9" class="form-control" readonly="">
+                </div>
+                <div class="col-md-2">
+                    <select th:name="${row.getWeightName()}" class="form-control selectpicker"
+                            style="font-weight: bold; color: #0069D9" onchange="countTotalScore()">
+                        <option th:text="${row.getWeight()}"> 10</option>
+                        <option>0</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row" id="d1">
+                <div class="col-md-10">
+                    <input name="block_3" type="text" th:value="${#strings.substringAfter(blocknames.get(3),'=')}"
+                           style="font-weight: bold; color:#218838" class="form-control" readonly="">
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row4}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1" th:title="${row.getCriteria()}">
+                    <input th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}"
+                           style="color: #0069D9" class="form-control" readonly="">
+                </div>
+                <div class="col-md-2">
+                    <select th:name="${row.getWeightName()}" class="form-control selectpicker"
+                            style="font-weight: bold; color: #0069D9" onchange="countTotalScore()">
+                        <option th:text="${row.getWeight()}"> 10</option>
+                        <option>0</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row" id="e1">
+                <div class="col-md-10">
+                    <input name="block_4" type="text" th:value="${#strings.substringAfter(blocknames.get(4),'=')}"
+                           style="font-weight: bold; color:#218838" class="form-control" readonly="">
+                </div>
+            </div>
+            <br>
+            <div class="row" th:each="row : ${row5}" th:id="${row.getId()}">
+                <div class="col-md-8 offset-md-1" th:title="${row.getCriteria()}">
+                    <input th:name="${row.getCriteriaName()}" type="text" th:value="${row.getCriteria()}"
+                           style="color: #0069D9" class="form-control" readonly="">
+                </div>
+                <div class="col-md-2">
+                    <select th:name="${row.getWeightName()}" class="form-control selectpicker"
+                            style="font-weight: bold; color: #0069D9" onchange="countTotalScore()">
+                        <option th:text="${row.getMaxWeight()}" th:selected="${row.getMaxWeight()==row.getWeight()}"> 10</option>
+                        <option th:selected="${0==row.getWeight()}">0</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="col-md-3 offset-md-9" >
+                <div class="form-group">
+                    <label for="total_score" style="font-weight: bold; color: #218838">Total score:</label>
+                    <div style="font-weight: bold;font-size: 24px; color:#218838" id="total_score2">100</div>
+                </div>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary" id="button">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+   //setting auditor input value
+    document.getElementById('auditor').value = document.getElementById('auditorname').innerText;
+    countTotalScore();
+
+    function loadPage(project) {
+        var selectedOption = project.options[project.selectedIndex];
+        window.location.replace("http://localhost:8080/entries/new/" + selectedOption.value);
+    }
+
+ function countTotalScore(){
+        let totalCount = 0;
+        let selectList = document.getElementsByTagName('select');
+   for (let i = 0; i < selectList.length; i++) {
+       if(selectList[i].name.includes("weight")) {
+           totalCount += parseInt(selectList[i].value);
+           if(selectList[i].value=="0"){
+               selectList[i].style.color="red";
+               document.getElementsByName("criteria_"+selectList[i].parentElement.parentElement.id)[0].style.color="red";
+           }
+           else{
+               selectList[i].style.color="#0069D9";
+               document.getElementsByName("criteria_"+selectList[i].parentElement.parentElement.id)[0].style.color="#0069D9";
+           }
+       }
+       document.getElementById('total_score').innerText=totalCount;
+       document.getElementById('total_score2').innerText=totalCount;
+       if(totalCount>84){
+           document.getElementById('total_score').style.color="#218838";
+           document.getElementById('total_score2').style.color="#218838";
+       }
+       if(totalCount>=70 && totalCount<85){
+           document.getElementById('total_score').style.color="#f29c07";
+           document.getElementById('total_score2').style.color="#f29c07";
+       }
+       if(totalCount<70){
+           document.getElementById('total_score').style.color="red";
+           document.getElementById('total_score2').style.color="red";
+       }
+   }
+   if(document.getElementById('critical_error').value!='Отсутствуют'){
+       document.getElementById('total_score').innerText=0;
+       document.getElementById('total_score2').innerText=0;
+       document.getElementById('total_score').style.color="red";
+       document.getElementById('total_score2').style.color="red";
+   }
+
+  }
+</script>
+
+
+</body>
+</html>

@@ -6,6 +6,7 @@ import com.balakin.qa.domain.Row;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface CheckListService {
@@ -14,6 +15,6 @@ public interface CheckListService {
     CheckList saveOrUpdateCheckList(@RequestBody MultiValueMap<String, String> formData) throws Exception;
     void deleteById(Long idToDelete);
     List<String> getBlockNames(String payload);
-    List<List<Row>> getBlocks(String payload);
-    List<Row> uniteBlocks(List<String> blocks);
+    List<String> getCritErrors(String payload);
+    List<List<Row>> getBlocks(String payload) throws IOException;
 }

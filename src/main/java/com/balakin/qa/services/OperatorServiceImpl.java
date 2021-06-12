@@ -30,14 +30,10 @@ public class OperatorServiceImpl implements OperatorService {
     }
 
     @Override
-    public List<Operator> getAllOperators(String request) {
+    public List<Operator> getAllOperators() {
 
-        switch (request){
-            case "[all]": return operatorRepository.findAll();
-            case "[actual]": return operatorRepository.findAll().stream().filter(operator -> !operator.isFired()).collect(Collectors.toList());
-            case "[fired]" : return operatorRepository.findAll().stream().filter(operator -> operator.isFired()).collect(Collectors.toList());
-            default: return operatorRepository.findAll();
-        }
+        return operatorRepository.findAll();
+
     }
 
     @Override
@@ -56,7 +52,12 @@ public class OperatorServiceImpl implements OperatorService {
 
     @Override
     public Operator findByName(String name) {
-        return operatorRepository.findByFullName(name);
+        return name.equals("all")? new Operator("all") : operatorRepository.findByFullName(name);
+    }
+
+    @Override
+    public Operator findFirst() {
+        return  getAllOperators().size()==0 ? new Operator() : getAllOperators().get(0);
     }
 
     @Override
